@@ -10,9 +10,8 @@ const VideoRecorder = () => {
   const [recordingState, setRecordingState] = useState("inactive");
   const [vidChunks, setVidChunks] = useState<Blob[]>([]);
   const [recordedVid, setRecordedVid] = useState<string | null>(null);
-  const [audioSource, setAudioSource] = useState("default");
-  const [videoSource, setVideoSource] = useState("default");
-  const [gotAccess, setGotAccess] = useState(false);
+  const [audioSource, setAudioSource] = useState<string | null>(null);
+  const [videoSource, setVideoSource] = useState<string | null>(null);
   const vidRecorder = useRef<MediaRecorder | null>(null);
   const liveFeed = useRef<HTMLVideoElement | null>(null);
   const audioSrcRef = useRef<HTMLSelectElement | null>(null);
@@ -21,9 +20,22 @@ const VideoRecorder = () => {
 
   // on first load, make sure to get the available devices from the user and show them in the source options
   useEffect(() => {
+    if(audioSrcRef.current && audioSrcRef.current?.childNodes.length > 1) {
+      return;
+    }
     const setUserDevice = async () => {
       // get all user device options
       const userDevices = await navigator.mediaDevices.enumerateDevices()
+      // make sure the options don't render more than once
+      const audioFilter = userDevices.filter((device) => device.kind === 'audioinput');
+      const videoFilter = userDevices.filter((device) => device.kind === 'videoinput');
+
+      if(audioSrcRef.current && audioSrcRef.current?.length - 1 === audioFilter.length) {
+        return;
+      }
+      if(videoSrcRef.current && videoSrcRef.current?.length - 1 === videoFilter.length) {
+        return;
+      }
       // create and set an option element for each device
         for(const userDevice of userDevices) {
           const option = document.createElement('option');
@@ -43,6 +55,10 @@ const VideoRecorder = () => {
 
   // get permission from user to use video/audio device
   const getUserPermission = async() => {
+    if(audioSource === null || videoSource === null) {
+      alert("Please select and audio and video device before granting access, thanks.");
+      return;
+    }
     setRecordedVid(null);
     // make sure recording is available on the device
     if("MediaRecorder" in window) {
