@@ -1,4 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
+import VideoRecorder from "~/shared/components/VideoRecorder";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -9,8 +10,9 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
+    <div className="h-full w-full flex flex-col justify-center items-center mt-[10vh] pt-8">
+      <h1 className="text-3xl font-bold">Pivodio Recording Interface</h1>
+      <VideoRecorder />
     </div>
   );
 }

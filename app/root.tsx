@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
   V2_MetaFunction
 } from "@remix-run/react";
+import NavBar from "./shared/components/NavBar";
 import stylesheet from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -50,6 +51,7 @@ function Document({ children }: any) {
 export function Layout({ children }: any) {
   return (
     <>
+      <NavBar />
       {children}
     </>
   )
