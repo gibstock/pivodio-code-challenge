@@ -1,5 +1,10 @@
 import {useState, useRef, useEffect} from 'react'
 
+/*
+* TODO: 
+* Refactor this down to individual components and helper functions to 
+* reduce unnecessary rerenders
+*/
 
 // set the mime type for the video, make sure window has access
 const mimeType = "video/webm";
