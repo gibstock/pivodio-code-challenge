@@ -74,11 +74,6 @@ const VideoRecorder = () => {
 
         
       }catch(err) {
-        // @ts-ignore
-        if(err.message === OverconstrainedError) {
-          // @ts-ignore
-          console.error(OverconstrainedError.constraint);
-        }
         console.error(err)
       }
     } else {
