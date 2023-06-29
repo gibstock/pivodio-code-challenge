@@ -10,8 +10,8 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center mt-[10vh] pt-8">
-      <h1 className="text-3xl font-bold">Pivodio Recording Interface</h1>
+    <div className="h-full w-full flex flex-col justify-center items-center mt-[10vh] pt-6 md:pt-8">
+      <h1 className="text-3xl font-bold text-center">Pivodio Recording Interface</h1>
       <VideoRecorder />
     </div>
   );

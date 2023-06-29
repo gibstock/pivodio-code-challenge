@@ -39,19 +39,6 @@ const VideoRecorder = () => {
     setRecordedVid(null);
     if("MediaRecorder" in window) {
       try{
-
-        // const userDevices = await navigator.mediaDevices.enumerateDevices()
-        // for(const userDevice of userDevices) {
-        //   const option = document.createElement('option');
-        //   option.value = userDevice.deviceId;
-        //   if(userDevice.kind === 'audioinput') {
-        //     option.text = userDevice.label || `Microphone ${audioSrcRef.current && audioSrcRef.current?.length + 1}`;
-        //     audioSrcRef.current?.appendChild(option);
-        //   }else if (userDevice.kind === 'videoinput') {
-        //     option.text = userDevice.label || `Camera ${videoSrcRef.current && videoSrcRef.current.length + 1}`;
-        //     videoSrcRef.current?.appendChild(option);
-        //   }
-        // }
         const videoConstraints = {
           audio: false,
           video: { deviceId: videoSource ? {exact: videoSource} : undefined}
@@ -121,7 +108,7 @@ const VideoRecorder = () => {
         <h2 className='text-2xl'>Pivodio Recorder</h2>
       </header>
       <main className='flex flex-col justify-center items-center gap-8'>
-        <div className="select-src flex flex-row gap-4">
+        <div className="select-src flex flex-col md:flex-row gap-4">
           <div className="select-audio-src flex flex-col">
             <label htmlFor="audioSrc">Audio Source</label>
             <select onChange={(e) => setAudioSource(e.currentTarget.value)} id="audioSrc" ref={audioSrcRef} className='max-w-[250px]'>
