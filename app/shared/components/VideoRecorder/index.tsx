@@ -1,5 +1,7 @@
 import {useState, useRef, useEffect} from 'react'
 
+
+// set the mime type for the video, make sure window has access
 const mimeType = "video/webm";
 
 const VideoRecorder = () => {
@@ -17,9 +19,12 @@ const VideoRecorder = () => {
   const videoSrcRef = useRef<HTMLSelectElement | null>(null);
 
 
+  // on first load, make sure to get the available devices from the user and show them in the source options
   useEffect(() => {
     const setUserDevice = async () => {
+      // get all user device options
       const userDevices = await navigator.mediaDevices.enumerateDevices()
+      // create and set an option element for each device
         for(const userDevice of userDevices) {
           const option = document.createElement('option');
           option.value = userDevice.deviceId;
@@ -33,16 +38,22 @@ const VideoRecorder = () => {
         }
     }
     setUserDevice()
+    // no dependency array, we only want this run once
   }, [])
 
+  // get permission from user to use video/audio device
   const getUserPermission = async() => {
     setRecordedVid(null);
+    // make sure recording is available on the device
     if("MediaRecorder" in window) {
       try{
+        // Set the video and audio constraints separately
         const videoConstraints = {
           audio: false,
           video: { deviceId: videoSource ? {exact: videoSource} : undefined}
         }
+        // create separate video and audio streams and combine them later
+        // This eliminates the audio feedback loop of the external and internal audio recording
         const videoStream = await navigator.mediaDevices.getUserMedia(videoConstraints);
 
         const audioConstraints = {
@@ -52,6 +63,7 @@ const VideoRecorder = () => {
 
         setUserPermission(true);
 
+        // combine the audio and video here
         const dataStream = new MediaStream([
           ...videoStream.getVideoTracks(),
           ...audioStream.getAudioTracks(),
@@ -61,6 +73,7 @@ const VideoRecorder = () => {
 
         
       }catch(err) {
+        // More specific errors can be set here depending on the error
         console.error(err)
       }
     } else {
@@ -68,6 +81,7 @@ const VideoRecorder = () => {
     }
   }
 
+  // Once permission has been set, this begins recording
   const startRecording = async () => {
     if(vidStream) {
       setRecordingState("recording");
@@ -123,6 +137,8 @@ const VideoRecorder = () => {
           </div>
         </div>
         <div className={`video-controls mb-5 ${recordedVid ? 'hidden' : ''}`}>
+          {/* Begin the flow control */}
+          {/* Set the DOM depending on the user permission, recording state, and whether or not there is recorded video  */}
           {!userPermission && !recordedVid ? (
             <button className='bg-[#fcfd67] hover:bg-[#fffda7] p-3' onClick={getUserPermission}>
               Allow Camera Access

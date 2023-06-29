@@ -48,6 +48,8 @@ function Document({ children }: any) {
   )
 }
 
+
+// Layout for consistency accross site
 export function Layout({ children }: any) {
   return (
     <>
