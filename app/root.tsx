@@ -1,4 +1,3 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
@@ -7,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  V2_MetaFunction
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
 
@@ -14,7 +14,21 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet }
 ];
 
+export const meta: V2_MetaFunction = () => [
+  {title: "Pivodio Code Test"}
+]
+
 export default function App() {
+  return (
+    <Document>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </Document>
+  );
+}
+
+function Document({ children }: any) {
   return (
     <html lang="en">
       <head>
@@ -24,11 +38,19 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
+        {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
-  );
+  )
+}
+
+export function Layout({ children }: any) {
+  return (
+    <>
+      {children}
+    </>
+  )
 }
